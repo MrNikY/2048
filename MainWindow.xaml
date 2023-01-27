@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:_2048"
         mc:Ignorable="d"
-        Title="MainWindow" Height="580" Width="480" Background="#FFF5EDD9">
+        Title="MainWindow" Height="580" Width="480" Background="#FFF5EDD9" MinWidth="480" MinHeight="580">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -19,30 +19,35 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Border Grid.Row="0" Grid.Column="0" Background="#FFBBADA0" Margin="4" CornerRadius="5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1.3*"/>
-                    </Grid.RowDefinitions>
+                <UniformGrid Rows="2">
                     <TextBlock Grid.Row="0" Text="SCORE" FontWeight="Bold" Foreground="#FFEEE4DA" FontSize="20" TextAlignment="Center"/>
-                    <TextBlock Grid.Row="1" Text="0" FontWeight="Bold" Foreground="#FFEEE4DA" FontSize="24" TextAlignment="Center"/>
-                </Grid>
+                    <TextBlock x:Name="Score" Grid.Row="1" Text="0" FontWeight="Bold" Foreground="#FFEEE4DA" FontSize="24" TextAlignment="Center" Margin="0,-5,0,0"/>
+                </UniformGrid>
             </Border>
             <Border Grid.Row="0" Grid.Column="1" Background="#FFBBADA0" Margin="4" CornerRadius="5">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*"/>
-                        <RowDefinition Height="1.3*"/>
-                    </Grid.RowDefinitions>
+                <UniformGrid Rows="2">
                     <TextBlock Grid.Row="0" Text="BEST" FontWeight="Bold" Foreground="#FFEEE4DA" FontSize="20" TextAlignment="Center"/>
-                    <TextBlock Grid.Row="1" Text="0" FontWeight="Bold" Foreground="#FFEEE4DA" FontSize="24" TextAlignment="Center"/>
-                </Grid>
+                    <TextBlock x:Name="Best" Grid.Row="1" Text="0" FontWeight="Bold" Foreground="#FFEEE4DA" FontSize="24" TextAlignment="Center" Margin="0,-5,0,0"/>
+                </UniformGrid>
             </Border>
         </Grid>
 
         <!--Field-->
-        <Border Grid.Row="1" Background="#FFBBADA0" Margin="4" CornerRadius="5">
-            
+        <Border Grid.Row="1" Background="#FFBBADA0" Margin="4" Padding="5" CornerRadius="5">
+            <ListBox x:Name="Field" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="4" Columns="4"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border CornerRadius="5" Background="#FFEEE4DA" Margin="5">
+                            <TextBlock Text="2" Foreground="#FF776E65" FontSize="48" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Border>
     </Grid>
 </Window>
