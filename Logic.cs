@@ -29,48 +29,22 @@ namespace _2048
             Right,
             Left,
         }
-        public int Run(System.Windows.Input.Key key)
+
+        public bool Run(System.Windows.Input.Key key)
         {
-            bool hasUpdated;
-
-            //while (true)
-            //{
-                //ConsoleKeyInfo input = Console.ReadKey(true); // BLOCKING TO WAIT FOR INPUT
-
-            switch (key)
+            var hasUpdated = key switch
             {
-                case System.Windows.Input.Key.Up:
-                    hasUpdated = Update(Direction.Up);
-                    break;
-
-                case System.Windows.Input.Key.Down:
-                    hasUpdated = Update(Direction.Down);
-                    break;
-
-                case System.Windows.Input.Key.Left:
-                    hasUpdated = Update(Direction.Left);
-                    break;
-
-                case System.Windows.Input.Key.Right:
-                    hasUpdated = Update(Direction.Right);
-                    break;
-
-                default:
-                    hasUpdated = false;
-                    break;
-            }
+                System.Windows.Input.Key.Up => Update(Direction.Up),
+                System.Windows.Input.Key.Down => Update(Direction.Down),
+                System.Windows.Input.Key.Left => Update(Direction.Left),
+                System.Windows.Input.Key.Right => Update(Direction.Right),
+                _ => false,
+            };
 
             if (hasUpdated)
-            {
                 PutNewValue();
-            }
 
-            if (IsDead())
-            {
-                return 1;
-            }
-            return 0;
-            //}
+            return IsDead();
         }
 
         private static bool Update(ulong[,] board, Direction direction, out ulong score)
@@ -98,7 +72,7 @@ namespace _2048
                 ? new Func<int, int>(innerIndex => innerIndex - 1)
                 : new Func<int, int>(innerIndex => innerIndex + 1);
 
-            Func<int, int> reverseDrop = isIncreasing
+            Func<int, int> step = isIncreasing
                 ? new Func<int, int>(innerIndex => innerIndex + 1)
                 : new Func<int, int>(innerIndex => innerIndex - 1);
 
@@ -114,7 +88,7 @@ namespace _2048
 
             for (int i = 0; i < outterCount; i++)
             {
-                for (int j = innerStart; innerCondition(j); j = reverseDrop(j))
+                for (int j = innerStart; innerCondition(j); j = step(j))
                 {
                     if (getValue(board, i, j) == 0)
                     {
@@ -147,17 +121,16 @@ namespace _2048
                         // we hit a node with same value BUT a previous merge had occurred
                         // 
                         // Simply stack along
-                        newJ = reverseDrop(newJ); // reverse back to its valid position
+                        newJ = step(newJ); // reverse back to its valid position
                         if (newJ != j)
                         {
                             // there's an update
                             hasUpdated = true;
+                            ulong value = getValue(board, i, j);
+                            setValue(board, i, j, 0);
+                            setValue(board, i, newJ, value);
                         }
 
-                        //prover'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-                        ulong value = getValue(board, i, j);
-                        setValue(board, i, j, 0);
-                        setValue(board, i, newJ, value);
                     }
                 }
             }
@@ -205,7 +178,7 @@ namespace _2048
 
             // We should have at least 1 empty slot. Since we know the user is not dead
             int iSlot = random.Next(0, emptySlots.Count); // randomly pick an empty slot
-            ulong value = random.Next(0, 100) < 95 ? (ulong)2 : (ulong)4; // randomly pick 2 (with 95% chance) or 4 (rest of the chance)
+            ulong value = random.Next(0, 100) < 90 ? (ulong)2 : (ulong)4; // randomly pick 2 (with 90% chance) or 4 (rest of the chance)
             Board[emptySlots[iSlot].Item1, emptySlots[iSlot].Item2] = value;
         }
     }

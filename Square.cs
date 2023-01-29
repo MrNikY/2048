@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Xml.Linq;
+using System.Windows;
 
 namespace _2048
 {
@@ -9,9 +9,13 @@ namespace _2048
         public event PropertyChangedEventHandler? PropertyChanged;
 
         public int number = 0;
+        public int fontSize = 48;
+        public Thickness margin = new(27, 0, 0, 0);
         public string color = "#776e65";
         public int Number { get => number; set { SetNumber(value); PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(Number))); } }
-        public string Color { get => color; set { color = value; PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(Number))); } }
+        public string Color { get => color; set { color = value; } }
+        public int FontSize { get => fontSize; set { fontSize = value; } }
+        public Thickness Margin { get => margin; set { margin = value; } }
 
         private readonly Dictionary<int, string> NumberColorMap = new()
             {
@@ -39,7 +43,32 @@ namespace _2048
             }
             catch
             {
-                color = "#242424";
+                color = "#7d89a9";
+            }
+            if (number < 10)
+            {
+                fontSize = 48;
+                margin = new(27, 0, 0, 0);
+            }
+            else if (number < 100)
+            {
+                fontSize = 48;
+                margin = new(14, 0, 0, 0);
+            }
+            else if (number < 1000)
+            {
+                fontSize = 40;
+                margin = new(7, 0, 0, 0);
+            }
+            else if (number < 10000)
+            {
+                fontSize = 36;
+                margin = new(0, 0, 0, 0);
+            }
+            else
+            {
+                fontSize = 28;
+                margin = new(0, 0, 0, 0);
             }
         }
     }
